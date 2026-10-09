@@ -380,6 +380,28 @@ footer {
     width: 100%;
   }
 }
+
+.online-counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #171717;
+  border: 1px solid #292929;
+  padding: 10px 14px;
+  border-radius: 20px;
+  color: #f7f7f7;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.online-dot {
+  width: 9px;
+  height: 9px;
+  background: #22c55e;
+  border-radius: 50%;
+  box-shadow: 0 0 8px #22c55e;
+}
+
 </style>
 </head>
 
@@ -387,6 +409,14 @@ footer {
 
 <header>
   <div class="logo">VEXORA<span>+</span></div>
+
+
+  
+<div class="online-counter">
+  <span class="online-dot"></span>
+  <span id="onlineCount">1</span>
+  <span>Online</span>
+</div>
 
   <div class="header-actions">
     <button class="secondary" id="loginBtn">Google Login</button>
@@ -507,6 +537,47 @@ const firebaseConfig = {
   appId: "1:605637576229:web:c4e4e7ce749dbef36221cc",
   measurementId: "G-0LPPDKVQM6"
 };
+
+import {
+  getDatabase,
+  ref,
+  onValue,
+  onDisconnect,
+  set,
+  remove,
+  serverTimestamp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+const db = getDatabase(app);
+
+const onlineRef = ref(db, "onlineUsers");
+const myConnectionRef = ref(
+  db,
+  "onlineUsers/" + crypto.randomUUID()
+);
+
+async function startOnlineCounter() {
+  try {
+    await onDisconnect(myConnectionRef).remove();
+
+    await set(myConnectionRef, {
+      online: true,
+      lastSeen: serverTimestamp()
+    });
+
+    onValue(onlineRef, snapshot => {
+      const users = snapshot.val() || {};
+      $("onlineCount").textContent = Object.keys(users).length;
+    });
+  } catch (error) {
+    console.error("Online counter error:", error);
+    $("onlineCount").textContent = "—";
+  }
+}
+
+startOnlineCounter();
+
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);

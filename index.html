@@ -1,919 +1,207 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>VEXORA+ | Video Hub</title>
-
+<meta name="theme-color" content="#0b0d14">
+<title>VEXORA+ Chat</title>
 <style>
-:root {
-  --bg: #090909;
-  --card: #171717;
-  --orange: #ff6a00;
-  --text: #f7f7f7;
-  --muted: #a3a3a3;
-  --border: #292929;
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
-
-body {
-  font-family: Arial, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-}
-
-header {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  background: rgba(9,9,9,.96);
-  border-bottom: 1px solid var(--border);
-  padding: 15px 5%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 15px;
-  flex-wrap: wrap;
-}
-
-.logo {
-  color: var(--orange);
-  font-size: 26px;
-  font-weight: 900;
-  letter-spacing: 1px;
-}
-
-.logo span {
-  color: white;
-}
-
-.header-actions {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-
-button {
-  cursor: pointer;
-  border: 0;
-  border-radius: 8px;
-  padding: 11px 15px;
-  font-weight: bold;
-  transition: .2s;
-}
-
-button:hover {
-  transform: translateY(-1px);
-  filter: brightness(1.1);
-}
-
-.primary {
-  background: var(--orange);
-  color: white;
-}
-
-.secondary {
-  background: #242424;
-  color: white;
-  border: 1px solid #383838;
-}
-
-main {
-  width: 90%;
-  max-width: 1400px;
-  margin: 28px auto;
-}
-
-.hero {
-  padding: 35px;
-  background: linear-gradient(120deg, #281204, #171717 65%);
-  border: 1px solid #49230d;
-  border-radius: 18px;
-  margin-bottom: 28px;
-}
-
-.hero h1 {
-  font-size: clamp(28px, 5vw, 48px);
-  margin-bottom: 12px;
-}
-
-.hero h1 span {
-  color: var(--orange);
-}
-
-.hero p {
-  color: #d0d0d0;
-  line-height: 1.6;
-  max-width: 650px;
-}
-
-.toolbar {
-  display: flex;
-  gap: 12px;
-  flex-wrap: wrap;
-  margin: 22px 0;
-}
-
-input, select {
-  background: #171717;
-  border: 1px solid #333;
-  border-radius: 8px;
-  padding: 13px;
-  color: white;
-  outline: none;
-  min-width: 0;
-}
-
-input:focus, select:focus {
-  border-color: var(--orange);
-}
-
-#searchInput {
-  flex: 1;
-  min-width: 180px;
-}
-
-.section-title {
-  font-size: 22px;
-  margin: 25px 0 16px;
-}
-
-.video-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-  gap: 18px;
-}
-
-.video-card {
-  background: var(--card);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  overflow: hidden;
-  transition: .2s;
-}
-
-.video-card:hover {
-  border-color: var(--orange);
-  transform: translateY(-3px);
-}
-
-.thumbnail {
-  height: 145px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #301606, #171717);
-  color: var(--orange);
-  font-size: 42px;
-  font-weight: 900;
-  overflow: hidden;
-}
-
-.thumbnail img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-}
-
-.video-details {
-  padding: 14px;
-}
-
-.video-details h3 {
-  font-size: 16px;
-  overflow-wrap: anywhere;
-  margin-bottom: 8px;
-}
-
-.video-details p {
-  color: var(--muted);
-  font-size: 13px;
-  margin-bottom: 13px;
-}
-
-.card-actions {
-  display: flex;
-  gap: 8px;
-}
-
-.card-actions button {
-  flex: 1;
-  padding: 10px 8px;
-}
-
-.empty {
-  text-align: center;
-  padding: 45px 10px;
-  color: var(--muted);
-  grid-column: 1 / -1;
-  background: #131313;
-  border-radius: 12px;
-}
-
-footer {
-  text-align: center;
-  color: var(--muted);
-  padding: 35px 15px;
-  margin-top: 40px;
-  border-top: 1px solid var(--border);
-}
-
-.modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  z-index: 100;
-  background: rgba(0,0,0,.88);
-  align-items: center;
-  justify-content: center;
-  padding: 15px;
-}
-
-.modal.show {
-  display: flex;
-}
-
-.modal-box {
-  background: #141414;
-  border: 1px solid #333;
-  border-radius: 14px;
-  padding: 22px;
-  width: 100%;
-  max-width: 650px;
-  max-height: 92vh;
-  overflow-y: auto;
-}
-
-.modal-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 20px;
-}
-
-.modal-top h2 {
-  font-size: 21px;
-}
-
-.close {
-  background: #292929;
-  color: white;
-  font-size: 20px;
-  padding: 6px 12px;
-}
-
-.form-field {
-  margin-bottom: 15px;
-}
-
-.form-field label {
-  display: block;
-  margin-bottom: 7px;
-  color: #ddd;
-  font-size: 14px;
-}
-
-.form-field input,
-.form-field select {
-  width: 100%;
-}
-
-.note {
-  color: var(--muted);
-  font-size: 12px;
-  line-height: 1.5;
-  margin-top: 8px;
-}
-
-.player-box {
-  max-width: 1000px;
-  width: 100%;
-}
-
-#playerContent {
-  width: 100%;
-  min-height: 200px;
-  background: #000;
-  border-radius: 10px;
-  overflow: hidden;
-}
-
-#playerContent iframe,
-#playerContent video {
-  display: block;
-  width: 100%;
-  height: min(65vh, 560px);
-  border: 0;
-  background: black;
-}
-
-.player-message {
-  min-height: 220px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 15px;
-  text-align: center;
-  padding: 25px;
-}
-
-.status {
-  color: var(--muted);
-  font-size: 13px;
-  margin-top: 12px;
-  overflow-wrap: anywhere;
-}
-
-.hidden {
-  display: none !important;
-}
-
-@media (max-width: 600px) {
-  header {
-    padding: 13px 5%;
-  }
-
-  .logo {
-    font-size: 23px;
-  }
-
-  main {
-    width: 92%;
-    margin-top: 18px;
-  }
-
-  .hero {
-    padding: 23px;
-  }
-
-  .video-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-
-  .thumbnail {
-    height: 110px;
-  }
-
-  .video-details {
-    padding: 10px;
-  }
-
-  .video-details h3 {
-    font-size: 14px;
-  }
-
-  .card-actions {
-    flex-direction: column;
-  }
-
-  .card-actions button {
-    width: 100%;
-  }
-}
-
-.online-counter {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: #171717;
-  border: 1px solid #292929;
-  padding: 10px 14px;
-  border-radius: 20px;
-  color: #f7f7f7;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.online-dot {
-  width: 9px;
-  height: 9px;
-  background: #22c55e;
-  border-radius: 50%;
-  box-shadow: 0 0 8px #22c55e;
-}
-
+:root{--bg:#0b0d14;--panel:#121622;--panel2:#191e2c;--border:#292f40;--text:#f4f6ff;--muted:#929bb0;--accent:#8b5cf6}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font-family:Inter,system-ui,Arial,sans-serif}button,input{font:inherit}button{cursor:pointer}.hidden{display:none!important}.muted{color:var(--muted)}.small{font-size:12px}.logo{font-size:22px;font-weight:900;letter-spacing:1px}.logo span{color:var(--accent)}.btn{border:1px solid var(--border);background:var(--panel2);color:var(--text);padding:10px 13px;border-radius:10px}.btn.primary{background:var(--accent);border-color:var(--accent);color:white}.btn:disabled{opacity:.5;cursor:not-allowed}input{width:100%;background:#0d1019;border:1px solid var(--border);border-radius:10px;padding:12px;color:var(--text);outline:none}input:focus{border-color:var(--accent)}label{display:block;font-size:13px;color:#c5cada;margin:12px 0 6px}.auth-wrap{min-height:100dvh;display:grid;place-items:center;padding:20px;background:radial-gradient(ellipse at top,#252047 0,transparent 48%),var(--bg)}.auth-card{width:min(430px,100%);background:rgba(18,22,34,.96);border:1px solid var(--border);border-radius:22px;padding:26px;box-shadow:0 25px 90px #0005}.auth-card h1{margin:24px 0 6px;font-size:27px}.auth-card p{line-height:1.5}.auth-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:20px 0}.auth-tabs button{padding:11px;border-radius:10px;border:1px solid var(--border);background:var(--panel);color:var(--muted)}.auth-tabs button.active{background:var(--accent);color:white}.full{width:100%;margin-top:18px}#authMessage{margin-top:12px;font-size:13px;line-height:1.5}.topbar{height:66px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 20px;background:#10131c}.top-actions{display:flex;align-items:center;gap:10px}.avatar{width:43px;height:43px;object-fit:cover;border-radius:50%;background:#292f40;flex-shrink:0}.avatar.sm{width:36px;height:36px}.workspace{height:calc(100dvh - 66px);display:grid;grid-template-columns:330px minmax(0,1fr)}.sidebar{background:var(--panel);border-right:1px solid var(--border);display:flex;flex-direction:column;min-height:0}.side-scroll{overflow-y:auto;padding:16px;min-height:0}.profile-mini{display:flex;align-items:center;gap:11px;padding:12px;background:var(--panel2);border-radius:14px;margin-bottom:17px}.profile-mini .grow{min-width:0;flex:1}.profile-mini strong,.person-info strong{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.section-title{font-size:11px;letter-spacing:1.5px;color:var(--muted);font-weight:800;margin:19px 0 10px}.search-row{display:flex;gap:7px}.search-row input{min-width:0}.person{display:flex;align-items:center;gap:10px;padding:10px 8px;border-radius:12px;margin-top:5px}.person:hover{background:var(--panel2)}.person-info{min-width:0;flex:1}.person-info .sub{font-size:12px;color:var(--muted);margin-top:3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.person-actions{display:flex;gap:5px}.person-actions button{padding:7px 9px;font-size:12px}.empty{padding:18px 8px;color:var(--muted);font-size:13px;line-height:1.5}.chat-panel{display:flex;flex-direction:column;min-width:0;min-height:0}.chat-head{min-height:75px;display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--border)}.chat-head-info{min-width:0;flex:1}.chat-head-info strong{display:block}.chat-head-info small{display:block;color:var(--muted);margin-top:4px}#messages{flex:1;min-height:0;overflow-y:auto;padding:22px;display:flex;flex-direction:column;gap:13px}.message{max-width:min(72%,600px);align-self:flex-start;background:var(--panel2);border:1px solid var(--border);padding:10px 13px;border-radius:15px 15px 15px 4px;overflow-wrap:anywhere}.message.mine{align-self:flex-end;background:#38266b;border-color:#493485;border-radius:15px 15px 4px 15px}.message .sender{font-size:11px;color:#c9b9ff;margin-bottom:5px}.message .time{font-size:10px;color:#b0b6c8;margin-top:7px;text-align:right}.composer{display:flex;gap:10px;padding:14px 18px;border-top:1px solid var(--border);background:#10131c}.composer input{flex:1;min-width:0}.welcome{margin:auto;text-align:center;padding:30px;max-width:440px}.welcome .symbol{font-size:54px}.modal-backdrop{position:fixed;inset:0;background:#0009;z-index:10;display:grid;place-items:center;padding:16px}.modal{width:min(430px,100%);max-height:90dvh;overflow:auto;background:var(--panel);border:1px solid var(--border);border-radius:20px;padding:22px}.modal-head{display:flex;align-items:center;justify-content:space-between}.modal-actions{display:flex;gap:9px;margin-top:17px}.modal-actions button{flex:1}#appMessage{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);z-index:20;background:#202538;border:1px solid var(--border);padding:12px 16px;border-radius:12px;max-width:90%;display:none}.back-btn{display:none}
+@media(max-width:760px){.topbar{height:60px;padding:0 13px}.topbar .logo{font-size:19px}.top-actions{gap:6px}.top-actions .btn{padding:8px;font-size:12px}.workspace{height:calc(100dvh - 60px);grid-template-columns:1fr}.sidebar{grid-row:1;min-height:0;border-right:0}.side-scroll{padding:12px;overflow-y:auto}.profile-mini{padding:9px;margin-bottom:12px}.section-title{margin-top:14px}.chat-panel{display:none;grid-row:1;min-height:0;height:100%}#app.chat-open .sidebar{display:none}#app.chat-open .chat-panel{display:flex}.chat-head{min-height:67px;padding:10px 12px}.back-btn{display:inline-block;padding:8px 10px}#messages{padding:13px 10px;gap:10px}.message{max-width:88%;padding:10px 12px}.composer{padding:10px;gap:7px;padding-bottom:max(10px,env(safe-area-inset-bottom))}.composer .btn{padding:10px 13px}.person{padding:9px 4px}.person-actions button{padding:7px;font-size:11px}.welcome{padding:20px}}
 </style>
 </head>
-
 <body>
-
-<header>
-  <div class="logo">VEXORA<span>+</span></div>
-
-
-  
-<div class="online-counter">
-  <span class="online-dot"></span>
-  <span id="onlineCount">1</span>
-  <span>Online</span>
-</div>
-
-  <div class="header-actions">
-    <button class="secondary" id="loginBtn">Google Login</button>
-    <button class="secondary hidden" id="logoutBtn">Logout</button>
-    <button class="primary" id="addVideoBtn">+ Add Video</button>
-  </div>
-</header>
-
-<main>
-  <section class="hero">
-    <h1>Watch Your <span>Videos.</span></h1>
-    <p>
-      Welcome to VEXORA+ — add video links, organize your collection,
-      search videos, and watch supported videos from one place.
-    </p>
-  </section>
-
-  <div class="toolbar">
-    <input id="searchInput" type="search" placeholder="Search videos...">
-    <select id="categoryFilter">
-      <option value="all">All Categories</option>
-      <option value="Entertainment">Entertainment</option>
-      <option value="Music">Music</option>
-      <option value="Education">Education</option>
-      <option value="Other">Other</option>
-    </select>
-  </div>
-
-  <h2 class="section-title">Your Video Collection</h2>
-  <section class="video-grid" id="videoGrid"></section>
-  <p class="status" id="loginStatus">You are browsing as a guest.</p>
-</main>
-
-<footer>
-  <div class="logo">VEXORA<span>+</span></div>
-  <p style="margin-top:10px">Your personal video link hub.</p>
-  <p style="margin-top:8px">Only add videos you have permission to access and share.</p>
-</footer>
-
-<!-- Add video modal -->
-<div class="modal" id="addModal">
-  <div class="modal-box">
-    <div class="modal-top">
-      <h2>Add a Video</h2>
-      <button class="close" data-close="addModal">×</button>
-    </div>
-
-    <form id="videoForm">
-      <div class="form-field">
-        <label for="videoTitle">Video title</label>
-        <input id="videoTitle" maxlength="120" placeholder="Enter video title" required>
-      </div>
-
-      <div class="form-field">
-        <label for="videoUrl">Video URL</label>
-        <input id="videoUrl" type="url" placeholder="https://..." required>
-        <p class="note">
-          YouTube links, direct MP4 links, and provider-supported embed URLs
-          may play inside the website. Ordinary Pornhub page links open in a new tab.
-        </p>
-      </div>
-
-      <div class="form-field">
-        <label for="videoCategory">Category</label>
-        <select id="videoCategory">
-          <option>Entertainment</option>
-          <option>Music</option>
-          <option>Education</option>
-          <option>Other</option>
-        </select>
-      </div>
-
-      <div class="form-field">
-        <label for="videoThumbnail">Thumbnail image URL (optional)</label>
-        <input id="videoThumbnail" type="url" placeholder="https://example.com/image.jpg">
-      </div>
-
-      <button class="primary" type="submit" style="width:100%">Save Video</button>
-    </form>
-  </div>
-</div>
-
-<!-- Player modal -->
-<div class="modal" id="playerModal">
-  <div class="modal-box player-box">
-    <div class="modal-top">
-      <h2 id="playerTitle">Video Player</h2>
-      <button class="close" data-close="playerModal">×</button>
-    </div>
-    <div id="playerContent"></div>
-    <p class="note" id="playerNote"></p>
-  </div>
-</div>
-
+<section id="authScreen" class="auth-wrap">
+ <div class="auth-card">
+  <div class="logo">VEXORA<span>+</span></div><p class="muted">Your people. Your conversations.</p>
+  <div class="auth-tabs"><button id="showLogin" class="active" type="button">Login</button><button id="showRegister" type="button">Create account</button></div>
+  <form id="loginForm"><h1>Welcome back</h1><p class="muted">Login with your username and password.</p><label for="loginUsername">Username</label><input id="loginUsername" autocomplete="username" maxlength="20" placeholder="yourusername" required><label for="loginPassword">Password</label><input id="loginPassword" type="password" autocomplete="current-password" minlength="6" placeholder="Your password" required><button class="btn primary full" type="submit">Login</button></form>
+  <form id="registerForm" class="hidden"><h1>Create account</h1><p class="muted">Your username cannot be changed later.</p><label for="regUsername">Username (permanent)</label><input id="regUsername" autocomplete="username" minlength="3" maxlength="20" pattern="[A-Za-z0-9_]+" placeholder="e.g. nethum_123" required><p class="small muted">3–20 characters: letters, numbers and underscore.</p><label for="regNickname">Nickname</label><input id="regNickname" maxlength="30" placeholder="What should people call you?" required><label for="regPassword">Password</label><input id="regPassword" type="password" autocomplete="new-password" minlength="6" placeholder="At least 6 characters" required><label for="regImage">Profile image (optional)</label><input id="regImage" type="file" accept="image/png,image/jpeg,image/webp"><p class="small muted">Image is resized and compressed in your browser before saving to Firestore (max 1 MB document limit).</p><button class="btn primary full" type="submit">Create account</button></form>
+  <div id="authMessage" class="muted" role="status"></div>
+ </div>
+</section>
+<section id="app" class="hidden">
+ <header class="topbar"><div class="logo">VEXORA<span>+</span></div><div class="top-actions"><span id="topUsername" class="muted small"></span><button id="editProfileBtn" class="btn" type="button">Edit profile</button><button id="logoutBtn" class="btn" type="button">Logout</button></div></header>
+ <div class="workspace"><aside class="sidebar"><div class="side-scroll">
+  <div class="profile-mini"><img id="myAvatar" class="avatar" alt="My profile"><div class="grow"><strong id="myNickname">Loading...</strong><div id="myUsername" class="muted small"></div><div id="myId" class="muted small"></div></div><button id="copyIdBtn" class="btn" type="button" title="Copy user ID">ID</button></div>
+  <div class="section-title">FIND PEOPLE</div><form id="searchForm" class="search-row"><input id="userSearch" placeholder="Search username..." maxlength="20" aria-label="Search username"><button class="btn primary" type="submit">Find</button></form><div id="searchResults"><div class="empty">Search by username to find people.</div></div>
+  <div class="section-title">MY CONTACTS</div><div id="contactsList"><div class="empty">Your contacts will appear here.</div></div>
+  <div class="section-title">CHATS</div><div id="chatList"><div class="empty">No conversations yet.</div></div>
+ </div></aside>
+ <main class="chat-panel"><div id="chatHeader" class="chat-head hidden"><button id="backBtn" class="btn back-btn" type="button">←</button><img id="chatAvatar" class="avatar" alt="Contact profile"><div class="chat-head-info"><strong id="chatNickname"></strong><small id="chatUsername"></small></div></div><div id="welcome" class="welcome"><div class="symbol">✦</div><h2>Your space to chat</h2><p class="muted">Search for a username, add them to your contacts, and start a conversation.</p></div><div id="messages" class="hidden"></div><form id="composer" class="composer hidden"><input id="messageInput" maxlength="2000" autocomplete="off" placeholder="Write a message..." required><button class="btn primary" type="submit">Send</button></form></main></div>
+</section>
+<div id="profileModal" class="modal-backdrop hidden"><div class="modal"><div class="modal-head"><h2 style="margin:0">Edit profile</h2><button id="closeProfileBtn" class="btn" type="button">✕</button></div><p class="muted small">Username and user ID cannot be changed.</p><label>Username (permanent)</label><input id="editUsername" disabled><label>User ID (permanent)</label><input id="editUid" disabled><label for="editNickname">Nickname</label><input id="editNickname" maxlength="30" required><label for="editImage">Change profile image</label><input id="editImage" type="file" accept="image/png,image/jpeg,image/webp"><p class="small muted">Image will be compressed locally; no Firebase Storage required.</p><div class="modal-actions"><button id="cancelProfileBtn" class="btn" type="button">Cancel</button><button id="saveProfileBtn" class="btn primary" type="button">Save changes</button></div><div id="profileMessage" class="muted small"></div></div></div>
+<div id="appMessage" role="status"></div>
 <script type="module">
-import { initializeApp } from
-  "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {initializeApp} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,onAuthStateChanged,signOut,deleteUser} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {getFirestore,doc,getDoc,setDoc,updateDoc,collection,query,orderBy,startAt,endAt,getDocs,onSnapshot,addDoc,serverTimestamp,runTransaction,where} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-import {
-  getAuth,
-  GoogleAuthProvider,
-  signInWithPopup,
-  signOut,
-  onAuthStateChanged
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-
-/*
-  Replace these values with your own Firebase project configuration
-  if they differ from the project you are using.
-*/
-const firebaseConfig = {
-  apiKey: "AIzaSyAxWxPcWgNQ0MKjhRlkGZ6W7-tD9gnwyBM",
-  authDomain: "idtopup-a7e95.firebaseapp.com",
-  databaseURL: "https://idtopup-a7e95-default-rtdb.firebaseio.com",
-  projectId: "idtopup-a7e95",
-  storageBucket: "idtopup-a7e95.firebasestorage.app",
-  messagingSenderId: "605637576229",
-  appId: "1:605637576229:web:c4e4e7ce749dbef36221cc",
-  measurementId: "G-0LPPDKVQM6"
+const firebaseConfig={
+ apiKey:"AIzaSyAxWxPcWgNQ0MKjhRlkGZ6W7-tD9gnwyBM",
+ authDomain:"idtopup-a7e95.firebaseapp.com",
+ databaseURL:"https://idtopup-a7e95-default-rtdb.firebaseio.com",
+ projectId:"idtopup-a7e95",
+ storageBucket:"idtopup-a7e95.firebasestorage.app",
+ messagingSenderId:"605637576229",
+ appId:"1:605637576229:web:c4e4e7ce749dbef36221cc",
+ measurementId:"G-0LPPDKVQM6"
 };
+const fb=initializeApp(firebaseConfig),auth=getAuth(fb),db=getFirestore(fb);
+const $=id=>document.getElementById(id);
+const DEFAULT_AVATAR="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" rx="50" fill="#292f40"/><circle cx="50" cy="37" r="18" fill="#929bb0"/><path d="M16 95c2-23 15-34 34-34s32 11 34 34" fill="#929bb0"/></svg>');
+let currentUser=null,myProfile=null,contacts=[],allUsers=[],chats=[],activeChat=null,activePerson=null;
+let stopContacts=null,stopUsers=null,stopChats=null,stopMessages=null,searchVersion=0;
+// Prevent the auth listener from checking the profile before registration finishes.
+let registrationInProgress=false,activationSequence=0;
 
-import {
-  getDatabase,
-  ref,
-  onValue,
-  onDisconnect,
-  set,
-  remove,
-  serverTimestamp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+function norm(s){return s.trim().toLowerCase()}
+function authEmail(username){return norm(username)+"@vexora.chat"}
+function photo(p){return p?.photoURL||DEFAULT_AVATAR}
+function message(text,error=false){$("authMessage").textContent=text;$("authMessage").style.color=error?"#ff8797":"#929bb0"}
+function toast(text){const e=$("appMessage");e.textContent=text;e.style.display="block";clearTimeout(toast.t);toast.t=setTimeout(()=>e.style.display="none",3500)}
+function errText(e){const map={"auth/invalid-credential":"Username or password is incorrect.","auth/wrong-password":"Username or password is incorrect.","auth/user-not-found":"Username or password is incorrect.","auth/email-already-in-use":"This username is already registered.","auth/weak-password":"Password must contain at least 6 characters.","auth/invalid-email":"Please check your username.","auth/too-many-requests":"Too many attempts. Try again later.","permission-denied":"Firebase rules denied this action. Check the rules below."};return map[e?.code]||e?.message||"Something went wrong."}
+function showMode(mode){const login=mode==="login";$("loginForm").classList.toggle("hidden",!login);$("registerForm").classList.toggle("hidden",login);$("showLogin").classList.toggle("active",login);$("showRegister").classList.toggle("active",!login);message("")}
+$("showLogin").onclick=()=>showMode("login");$("showRegister").onclick=()=>showMode("register");
 
-
-const db = getDatabase(app);
-
-const onlineRef = ref(db, "onlineUsers");
-const myConnectionRef = ref(
-  db,
-  "onlineUsers/" + crypto.randomUUID()
-);
-
-async function startOnlineCounter() {
-  try {
-    await onDisconnect(myConnectionRef).remove();
-
-    await set(myConnectionRef, {
-      online: true,
-      lastSeen: serverTimestamp()
-    });
-
-    onValue(onlineRef, snapshot => {
-      const users = snapshot.val() || {};
-      $("onlineCount").textContent = Object.keys(users).length;
-    });
-  } catch (error) {
-    console.error("Online counter error:", error);
-    $("onlineCount").textContent = "—";
-  }
+/* Convert chosen image to a small JPEG data URL in-browser. No Storage upload. */
+async function compressImage(file){
+ if(!file)return "";
+ if(!["image/jpeg","image/png","image/webp"].includes(file.type))throw new Error("Choose a JPG, PNG or WebP image.");
+ if(file.size>10*1024*1024)throw new Error("Choose an image smaller than 10 MB.");
+ const source=await createImageBitmap(file);
+ const maxSide=256,scale=Math.min(1,maxSide/Math.max(source.width,source.height));
+ const canvas=document.createElement("canvas");canvas.width=Math.max(1,Math.round(source.width*scale));canvas.height=Math.max(1,Math.round(source.height*scale));
+ const ctx=canvas.getContext("2d");ctx.fillStyle="#ffffff";ctx.fillRect(0,0,canvas.width,canvas.height);ctx.drawImage(source,0,0,canvas.width,canvas.height);source.close?.();
+ let quality=.78,data=canvas.toDataURL("image/jpeg",quality);
+ while(data.length>450000&&quality>.35){quality-=.08;data=canvas.toDataURL("image/jpeg",quality)}
+ if(data.length>700000)throw new Error("This image cannot be compressed enough. Try a smaller image.");
+ return data;
 }
 
-startOnlineCounter();
-
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const provider = new GoogleAuthProvider();
-
-const $ = (id) => document.getElementById(id);
-
-let currentUser = null;
-let videos = loadVideos();
-
-function loadVideos() {
-  try {
-    const stored = JSON.parse(localStorage.getItem("vexora_videos") || "[]");
-    return Array.isArray(stored) ? stored : [];
-  } catch {
-    return [];
-  }
-}
-
-function saveVideos() {
-  localStorage.setItem("vexora_videos", JSON.stringify(videos));
-}
-
-function safeUrl(value) {
-  try {
-    const url = new URL(value.trim());
-    if (url.protocol !== "https:" && url.protocol !== "http:") return null;
-    return url;
-  } catch {
-    return null;
-  }
-}
-
-/*
-  Supported link handling:
-  - YouTube watch/short links: convert to YouTube embed
-  - Direct MP4/WebM/OGG: play with HTML video
-  - Official embed URLs: embed inside the player
-  - Ordinary Pornhub page URLs: open externally in a new tab
-*/
-function videoInfo(rawUrl) {
-  const url = safeUrl(rawUrl);
-  if (!url) return null;
-
-  const host = url.hostname.toLowerCase().replace(/^www\./, "");
-
-  if (host === "youtu.be") {
-    const id = url.pathname.split("/").filter(Boolean)[0];
-    if (id && /^[\w-]+$/.test(id)) {
-      return {
-        type: "embed",
-        embed: "https://www.youtube-nocookie.com/embed/" + id
-      };
-    }
-  }
-
-  if (host === "youtube.com" || host === "m.youtube.com") {
-    let id = url.searchParams.get("v");
-
-    if (!id && url.pathname.startsWith("/embed/")) {
-      id = url.pathname.split("/")[2];
-    }
-
-    if (!id && url.pathname.startsWith("/shorts/")) {
-      id = url.pathname.split("/")[2];
-    }
-
-    if (id && /^[\w-]+$/.test(id)) {
-      return {
-        type: "embed",
-        embed: "https://www.youtube-nocookie.com/embed/" + id
-      };
-    }
-  }
-
-  if (host === "pornhub.com" || host === "pornhub.org") {
-    if (url.pathname.startsWith("/embed/")) {
-      return {
-        type: "embed",
-        embed: url.href
-      };
-    }
-
-    return {
-      type: "external",
-      embed: url.href
-    };
-  }
-
-  if (/\.(mp4|webm|ogg)(?:$)/i.test(url.pathname)) {
-    return {
-      type: "direct",
-      embed: url.href
-    };
-  }
-
-  if (url.pathname.includes("/embed/")) {
-    return {
-      type: "embed",
-      embed: url.href
-    };
-  }
-
-  return {
-    type: "external",
-    embed: url.href
-  };
-}
-
-function openModal(id) {
-  $(id).classList.add("show");
-}
-
-function closeModal(id) {
-  $(id).classList.remove("show");
-
-  if (id === "playerModal") {
-    $("playerContent").replaceChildren();
-  }
-}
-
-document.querySelectorAll("[data-close]").forEach(button => {
-  button.addEventListener("click", () => closeModal(button.dataset.close));
-});
-
-document.querySelectorAll(".modal").forEach(modal => {
-  modal.addEventListener("click", event => {
-    if (event.target === modal) closeModal(modal.id);
+$("registerForm").addEventListener("submit",async e=>{
+ e.preventDefault();const username=norm($("regUsername").value),nickname=$("regNickname").value.trim(),password=$("regPassword").value,file=$("regImage").files[0];
+ if(!/^[a-z0-9_]{3,20}$/.test(username))return message("Username must be 3–20 letters, numbers or underscores.",true);
+ if(!nickname||nickname.length>30)return message("Nickname must be 1–30 characters.",true);
+ const button=$("registerForm").querySelector("button[type=submit]");button.disabled=true;message("Creating account...");
+ let cred=null;
+ try{
+  const photoURL=file?await compressImage(file):"";
+  registrationInProgress=true;
+  cred=await createUserWithEmailAndPassword(auth,authEmail(username),password);
+  const uid=cred.user.uid;
+  await runTransaction(db,async tx=>{
+   const index=doc(db,"usernameIndex",username),profile=doc(db,"users",uid);
+   const existing=await tx.get(index);if(existing.exists())throw new Error("This username is already taken.");
+   tx.set(index,{uid,usernameLower:username});
+   tx.set(profile,{uid,username,usernameLower:username,nickname,photoURL,createdAt:serverTimestamp()});
   });
+  registrationInProgress=false;
+  message("Account created. Opening VEXORA+...");
+  $("registerForm").reset();
+  await activateUser(cred.user);
+ }catch(error){
+  registrationInProgress=false;
+  if(cred?.user){try{await deleteUser(cred.user)}catch(_){try{await signOut(auth)}catch(__){}}}
+  message(errText(error),true);
+ }finally{registrationInProgress=false;button.disabled=false}
 });
 
-$("addVideoBtn").addEventListener("click", () => openModal("addModal"));
+$("loginForm").addEventListener("submit",async e=>{
+ e.preventDefault();const username=norm($("loginUsername").value),password=$("loginPassword").value;
+ if(!/^[a-z0-9_]{3,20}$/.test(username))return message("Enter a valid username.",true);
+ const button=$("loginForm").querySelector("button[type=submit]");button.disabled=true;message("Logging in...");
+ try{await signInWithEmailAndPassword(auth,authEmail(username),password)}catch(error){message(errText(error),true)}finally{button.disabled=false}
+});
 
-$("videoForm").addEventListener("submit", event => {
-  event.preventDefault();
-
-  const title = $("videoTitle").value.trim();
-  const rawUrl = $("videoUrl").value.trim();
-  const info = videoInfo(rawUrl);
-  const thumbnail = $("videoThumbnail").value.trim();
-
-  if (!title || !info) {
-    alert("Please enter a valid HTTP or HTTPS video link.");
-    return;
+function stopAll(){[stopContacts,stopUsers,stopChats,stopMessages].forEach(f=>{if(typeof f==="function")f()});stopContacts=stopUsers=stopChats=stopMessages=null}
+async function recoverMissingProfile(user){
+ const username=norm((user.email||"").split("@")[0]||"");
+ if(!/^[a-z0-9_]{3,20}$/.test(username))throw new Error("Could not recover the username for this account.");
+ const indexRef=doc(db,"usernameIndex",username),profileRef=doc(db,"users",user.uid);
+ await runTransaction(db,async tx=>{
+  const profileSnap=await tx.get(profileRef);
+  const indexSnap=await tx.get(indexRef);
+  if(profileSnap.exists())return;
+  if(indexSnap.exists()&&indexSnap.data().uid!==user.uid){
+   throw new Error("This username is already linked to another account. Contact the site administrator.");
   }
-
-  if (thumbnail && !safeUrl(thumbnail)) {
-    alert("Please enter a valid thumbnail URL.");
-    return;
-  }
-
-  videos.unshift({
-    id: crypto.randomUUID ? crypto.randomUUID() : String(Date.now()),
-    title,
-    url: rawUrl,
-    category: $("videoCategory").value,
-    thumbnail,
-    createdAt: new Date().toISOString()
+  if(!indexSnap.exists())tx.set(indexRef,{uid:user.uid,usernameLower:username});
+  tx.set(profileRef,{
+   uid:user.uid,
+   username,
+   usernameLower:username,
+   nickname:username,
+   photoURL:"",
+   createdAt:serverTimestamp()
   });
-
-  saveVideos();
-  renderVideos();
-  $("videoForm").reset();
-  closeModal("addModal");
-});
-
-function createElement(tag, className, text) {
-  const element = document.createElement(tag);
-  if (className) element.className = className;
-  if (text !== undefined) element.textContent = text;
-  return element;
+ });
+ return (await getDoc(profileRef)).data();
 }
-
-function renderVideos() {
-  const grid = $("videoGrid");
-  grid.replaceChildren();
-
-  const search = $("searchInput").value.trim().toLowerCase();
-  const category = $("categoryFilter").value;
-
-  const filtered = videos.filter(video => {
-    const matchesSearch = video.title.toLowerCase().includes(search);
-    const matchesCategory = category === "all" || video.category === category;
-    return matchesSearch && matchesCategory;
-  });
-
-  if (!filtered.length) {
-    const empty = createElement(
-      "div",
-      "empty",
-      videos.length
-        ? "No videos match your search."
-        : "No videos yet. Click “+ Add Video” to add your first link."
-    );
-    grid.appendChild(empty);
-    return;
+async function activateUser(user){
+ const sequence=++activationSequence;
+ stopAll();currentUser=user;activeChat=null;activePerson=null;contacts=[];chats=[];allUsers=[];$("app").classList.remove("chat-open");
+ if(!user){myProfile=null;$("authScreen").classList.remove("hidden");$("app").classList.add("hidden");return}
+ try{
+  let snap=await getDoc(doc(db,"users",user.uid));
+  if(sequence!==activationSequence)return;
+  if(!snap.exists()){
+   // Recover accounts left behind if Auth creation succeeded but profile creation failed.
+   await recoverMissingProfile(user);
+   snap=await getDoc(doc(db,"users",user.uid));
   }
-
-  filtered.forEach(video => {
-    const card = createElement("article", "video-card");
-    const thumbnail = createElement("div", "thumbnail");
-
-    if (video.thumbnail && safeUrl(video.thumbnail)) {
-      const img = document.createElement("img");
-      img.src = video.thumbnail;
-      img.alt = video.title;
-      img.loading = "lazy";
-      img.referrerPolicy = "no-referrer";
-      img.onerror = () => {
-        thumbnail.replaceChildren();
-        thumbnail.textContent = "V+";
-      };
-      thumbnail.appendChild(img);
-    } else {
-      thumbnail.textContent = "V+";
-    }
-
-    const details = createElement("div", "video-details");
-    details.appendChild(createElement("h3", "", video.title));
-    details.appendChild(createElement("p", "", video.category || "Other"));
-
-    const actions = createElement("div", "card-actions");
-
-    const playBtn = createElement("button", "primary", "Open Video");
-    playBtn.addEventListener("click", () => playVideo(video));
-
-    const deleteBtn = createElement("button", "secondary", "Delete");
-    deleteBtn.addEventListener("click", () => {
-      if (!confirm(`Delete "${video.title}"?`)) return;
-      videos = videos.filter(item => item.id !== video.id);
-      saveVideos();
-      renderVideos();
-    });
-
-    actions.append(playBtn, deleteBtn);
-    details.appendChild(actions);
-    card.append(thumbnail, details);
-    grid.appendChild(card);
-  });
+  if(sequence!==activationSequence)return;
+  if(!snap.exists())throw new Error("Profile recovery failed. Please check the Firestore rules.");
+  myProfile=snap.data();$("authScreen").classList.add("hidden");$("app").classList.remove("hidden");renderMyProfile();listenContacts();listenUsers();listenChats();
+ }catch(error){if(sequence===activationSequence)message(errText(error),true)}
 }
+onAuthStateChanged(auth,async user=>{
+ if(registrationInProgress)return;
+ await activateUser(user);
+});
+function renderMyProfile(){$("myAvatar").src=photo(myProfile);$("myNickname").textContent=myProfile.nickname||myProfile.username;$("myUsername").textContent="@"+myProfile.username;$("myId").textContent="ID: "+currentUser.uid;$("topUsername").textContent="@"+myProfile.username}
 
-function playVideo(video) {
-  const info = videoInfo(video.url);
-
-  if (!info) {
-    alert("This video URL is invalid.");
-    return;
-  }
-
-  $("playerTitle").textContent = video.title;
-  $("playerContent").replaceChildren();
-
-  if (info.type === "external") {
-    const message = createElement("div", "player-message");
-    message.appendChild(createElement("p", "", 
-      "This provider link needs to open on its original website."
-    ));
-
-    const openBtn = createElement("button", "primary", "Open Video Website");
-    openBtn.addEventListener("click", () => {
-      const opened = window.open(info.embed, "_blank", "noopener,noreferrer");
-      if (!opened) {
-        window.location.href = info.embed;
-      }
-    });
-
-    message.appendChild(openBtn);
-    $("playerContent").appendChild(message);
-    $("playerNote").textContent =
-      "Some providers do not permit playback inside other websites.";
-    openModal("playerModal");
-    return;
-  }
-
-  if (info.type === "direct") {
-    const videoElement = document.createElement("video");
-    videoElement.src = info.embed;
-    videoElement.controls = true;
-    videoElement.autoplay = true;
-    videoElement.playsInline = true;
-    videoElement.preload = "metadata";
-    $("playerContent").appendChild(videoElement);
-    $("playerNote").textContent = "Direct video playback.";
-    openModal("playerModal");
-    return;
-  }
-
-  const iframe = document.createElement("iframe");
-  iframe.src = info.embed;
-  iframe.title = video.title;
-  iframe.allow = "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen";
-  iframe.allowFullscreen = true;
-  iframe.referrerPolicy = "strict-origin-when-cross-origin";
-
-  $("playerContent").appendChild(iframe);
-  $("playerNote").textContent =
-    "If playback is blocked, use the provider's official website.";
-  openModal("playerModal");
+/* Search is prefix-based on username; username is lowercase in Firestore. */
+$("searchForm").addEventListener("submit",async e=>{
+ e.preventDefault();const term=norm($("userSearch").value),version=++searchVersion,box=$("searchResults");
+ if(term.length<2){box.innerHTML='<div class="empty">Type at least 2 characters.</div>';return}
+ box.innerHTML='<div class="empty">Searching...</div>';
+ try{const q=query(collection(db,"users"),orderBy("usernameLower"),startAt(term),endAt(term+"\uf8ff"));const snap=await getDocs(q);if(version!==searchVersion)return;
+ const people=snap.docs.map(d=>d.data()).filter(p=>p.uid!==currentUser.uid).slice(0,20);box.dataset.people=JSON.stringify(people);
+ if(!people.length){box.innerHTML='<div class="empty">No users found. Check the username.</div>';return}
+ box.innerHTML="";people.forEach(p=>box.appendChild(personRow(p,"search")))
+ }catch(error){box.innerHTML="";const d=document.createElement("div");d.className="empty";d.textContent=errText(error);box.appendChild(d)}
+});
+function personRow(p,kind){
+ const row=document.createElement("div");row.className="person";const img=document.createElement("img");img.className="avatar sm";img.src=photo(p);img.alt="";img.onerror=()=>img.src=DEFAULT_AVATAR;
+ const info=document.createElement("div");info.className="person-info";const name=document.createElement("strong");name.textContent=p.nickname||p.username;const sub=document.createElement("div");sub.className="sub";sub.textContent="@"+(p.username||"unknown");info.append(name,sub);
+ const actions=document.createElement("div");actions.className="person-actions";
+ if(kind==="search"){const exists=contacts.some(c=>c.uid===p.uid),add=document.createElement("button");add.className="btn"+(exists?"":" primary");add.textContent=exists?"Added":"+ Add";add.disabled=exists;add.onclick=()=>addContact(p);const chat=document.createElement("button");chat.className="btn";chat.textContent="Chat";chat.onclick=()=>openPrivateChat(p);actions.append(add,chat)}
+ else{const chat=document.createElement("button");chat.className="btn primary";chat.textContent="Chat";chat.onclick=()=>openPrivateChat(p);actions.append(chat)}
+ row.append(img,info,actions);return row;
 }
+function listenContacts(){stopContacts=onSnapshot(collection(db,"users",currentUser.uid,"contacts"),snap=>{contacts=snap.docs.map(d=>({...d.data(),uid:d.id}));renderContacts();refreshSearchResults()},e=>toast(errText(e)))}
+function renderContacts(){const box=$("contactsList");box.innerHTML="";if(!contacts.length){box.innerHTML='<div class="empty">No contacts yet. Search for a username and press + Add.</div>';return}contacts.sort((a,b)=>(a.nickname||a.username||"").localeCompare(b.nickname||b.username||""));contacts.forEach(c=>box.appendChild(personRow(profileFor(c.uid), "contact")))}
+function refreshSearchResults(){const box=$("searchResults");if(!box?.dataset.people)return;try{const people=JSON.parse(box.dataset.people);box.innerHTML="";people.forEach(p=>box.appendChild(personRow(p,"search")))}catch(_){}}
+async function addContact(person){if(!currentUser||!person?.uid||person.uid===currentUser.uid)return;try{const snap=await getDoc(doc(db,"users",person.uid));if(!snap.exists())throw new Error("This account no longer exists.");const p=snap.data();await setDoc(doc(db,"users",currentUser.uid,"contacts",person.uid),{uid:person.uid,username:p.username,nickname:p.nickname||p.username,photoURL:p.photoURL||"",addedAt:serverTimestamp()});toast("Contact added.")}catch(error){toast(errText(error))}}
+function listenUsers(){stopUsers=onSnapshot(collection(db,"users"),snap=>{allUsers=snap.docs.map(d=>d.data());renderContacts();renderChats()},e=>toast(errText(e)))}
+function profileFor(uid){return allUsers.find(p=>p.uid===uid)||contacts.find(p=>p.uid===uid)||{uid,username:"user",nickname:"User",photoURL:""}}
+function listenChats(){stopChats=onSnapshot(query(collection(db,"chats"),where("members","array-contains",currentUser.uid)),snap=>{chats=snap.docs.map(d=>({id:d.id,...d.data()}));chats.sort((a,b)=>(b.updatedAt?.toMillis?.()||0)-(a.updatedAt?.toMillis?.()||0));renderChats()},e=>toast(errText(e)))}
+function renderChats(){const box=$("chatList");box.innerHTML="";if(!chats.length){box.innerHTML='<div class="empty">No conversations yet.</div>';return}chats.forEach(chat=>{const p=profileFor((chat.members||[]).find(uid=>uid!==currentUser.uid));const row=document.createElement("div");row.className="person";row.style.cursor="pointer";const img=document.createElement("img");img.className="avatar sm";img.src=photo(p);img.alt="";const info=document.createElement("div");info.className="person-info";const name=document.createElement("strong");name.textContent=p.nickname||p.username;const sub=document.createElement("div");sub.className="sub";sub.textContent=chat.lastMessage||"Start a conversation";info.append(name,sub);row.append(img,info);row.onclick=()=>openChat(chat,p);box.appendChild(row)})}
+function privateId(a,b){return "private_"+[a,b].sort().join("_")}
+async function openPrivateChat(person){try{const id=privateId(currentUser.uid,person.uid),ref=doc(db,"chats",id),snap=await getDoc(ref);if(!snap.exists())await setDoc(ref,{type:"private",members:[currentUser.uid,person.uid],createdBy:currentUser.uid,createdAt:serverTimestamp(),updatedAt:serverTimestamp(),lastMessage:""});const latest=await getDoc(ref);await openChat({id,...latest.data()},profileFor(person.uid).uid?profileFor(person.uid):person)}catch(error){toast(errText(error))}}
+async function openChat(chat,person){activeChat=chat;activePerson=person;$("app").classList.add("chat-open");$("welcome").classList.add("hidden");$("chatHeader").classList.remove("hidden");$("messages").classList.remove("hidden");$("composer").classList.remove("hidden");$("chatAvatar").src=photo(person);$("chatAvatar").onerror=()=> $("chatAvatar").src=DEFAULT_AVATAR;$("chatNickname").textContent=person.nickname||person.username||"Chat";$("chatUsername").textContent="@"+(person.username||"");$("messages").innerHTML='<div class="empty">Loading messages...</div>';
+ if(stopMessages)stopMessages();stopMessages=onSnapshot(query(collection(db,"chats",chat.id,"messages"),orderBy("createdAt")),snap=>{const box=$("messages");box.innerHTML="";snap.docs.forEach(d=>{const m=d.data(),bubble=document.createElement("div");bubble.className="message"+(m.senderId===currentUser.uid?" mine":"");if(m.senderId!==currentUser.uid){const s=document.createElement("div");s.className="sender";s.textContent=m.senderName||person.nickname||person.username;bubble.appendChild(s)}const text=document.createElement("div");text.textContent=m.text||"";const time=document.createElement("div");time.className="time";time.textContent=m.createdAt?.toDate?m.createdAt.toDate().toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}):"Sending...";bubble.append(text,time);box.appendChild(bubble)});if(!snap.docs.length){const empty=document.createElement("div");empty.className="empty";empty.textContent="Say hello 👋";box.appendChild(empty)}box.scrollTop=box.scrollHeight},e=>toast(errText(e)))}
+$("backBtn").onclick=()=>$("app").classList.remove("chat-open");
+$("composer").addEventListener("submit",async e=>{e.preventDefault();const text=$("messageInput").value.trim();if(!text||!activeChat)return;const input=$("messageInput");input.disabled=true;try{await addDoc(collection(db,"chats",activeChat.id,"messages"),{text,senderId:currentUser.uid,senderName:myProfile.nickname||myProfile.username,photoURL:myProfile.photoURL||"",createdAt:serverTimestamp()});await updateDoc(doc(db,"chats",activeChat.id),{lastMessage:text.slice(0,120),updatedAt:serverTimestamp()});input.value=""}catch(error){toast(errText(error))}finally{input.disabled=false;input.focus()}});
 
-$("searchInput").addEventListener("input", renderVideos);
-$("categoryFilter").addEventListener("change", renderVideos);
-
-$("loginBtn").addEventListener("click", async () => {
-  try {
-    await signInWithPopup(auth, provider);
-  } catch (error) {
-    console.error(error);
-    alert("Google login failed: " + error.message);
-  }
-});
-
-$("logoutBtn").addEventListener("click", async () => {
-  try {
-    await signOut(auth);
-  } catch (error) {
-    alert("Logout failed: " + error.message);
-  }
-});
-
-onAuthStateChanged(auth, user => {
-  currentUser = user;
-
-  $("loginBtn").classList.toggle("hidden", !!user);
-  $("logoutBtn").classList.toggle("hidden", !user);
-
-  $("loginStatus").textContent = user
-    ? `Signed in as ${user.displayName || user.email || "Google user"}. Videos are stored in this browser.`
-    : "You are browsing as a guest. Videos are stored in this browser.";
-
-  // This demo keeps videos in localStorage. Google login does not
-  // automatically sync them to other users or devices.
-});
-
-renderVideos();
+function openProfile(){ $("editUsername").value=myProfile.username;$("editUid").value=currentUser.uid;$("editNickname").value=myProfile.nickname||"";$("editImage").value="";$("profileMessage").textContent="";$("profileModal").classList.remove("hidden")}
+function closeProfile(){$("profileModal").classList.add("hidden")}
+$("editProfileBtn").onclick=openProfile;$("closeProfileBtn").onclick=closeProfile;$("cancelProfileBtn").onclick=closeProfile;
+$("saveProfileBtn").onclick=async()=>{const nickname=$("editNickname").value.trim(),file=$("editImage").files[0];if(!nickname||nickname.length>30){$("profileMessage").textContent="Nickname must be 1–30 characters.";return}const b=$("saveProfileBtn");b.disabled=true;$("profileMessage").textContent="Saving...";try{let photoURL=myProfile.photoURL||"";if(file)photoURL=await compressImage(file);await updateDoc(doc(db,"users",currentUser.uid),{nickname,photoURL});myProfile={...myProfile,nickname,photoURL};renderMyProfile();closeProfile();toast("Profile updated.")}catch(error){$("profileMessage").textContent=errText(error)}finally{b.disabled=false}};
+$("copyIdBtn").onclick=async()=>{try{await navigator.clipboard.writeText(currentUser.uid);toast("User ID copied.")}catch(_){toast("Your user ID: "+currentUser.uid)}};
+$("logoutBtn").onclick=async()=>{stopAll();try{await signOut(auth)}catch(error){toast(errText(error))}};
 </script>
-
 </body>
 </html>
